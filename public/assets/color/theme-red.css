@@ -1,0 +1,66 @@
+/*===================================
+Author       : Templatemanja.
+Template Name: Tashan Restaurant and Cafe HTML5 Template
+Version      : 1.0
+===================================*/
+a:hover,
+.navbar .navbar-nav > li > a.active, .navbar .navbar-nav > li:hover > a, .light_skin.transparent_header.nav-fixed .navbar .navbar-nav > li > a.active, .light_skin.transparent_header.nav-fixed .navbar .navbar-nav > li:hover > a,
+.navbar .navbar-nav .dropdown-menu li a.active, .navbar .navbar-nav .dropdown-menu li a:hover, .navbar .navbar-nav .dropdown-menu > ul > li:hover > a, .navbar .navbar-nav .dropdown-menu > ul > .mega-menu-col ul > li:hover > a, .sticky_dark_skin.nav-fixed .navbar .navbar-nav .dropdown-item:hover,
+.dark_skin .navbar .navbar-nav .dropdown-menu li a.active, .dark_skin .navbar .navbar-nav .dropdown-menu li a:hover, .dark_skin .navbar .navbar-nav .dropdown-menu > ul > li:hover > a, .dark_skin .navbar .navbar-nav .dropdown-menu > ul > .mega-menu-col ul > li:hover > a,
+.sub_heading,
+.menu_price span,
+.social_white .social_icons li a:hover, .social_white.social_icons li a:hover,
+.social_icons li a:hover, .header_wrap .social_icons li a:hover,
+.team_title span,
+.author_name span,
+.blog_meta li a i,
+.footer_dark a:hover, .footer_dark .widget_links li a:hover, .widget_links li a:hover, .footer_dark .footer_link li a:hover, .footer_link li a:hover,
+.top-header.light_skin .header_list li a:hover, .top-header.light_skin .contact_detail li a:hover, .top-header.light_skin .header_list li a:hover span,
+.icon_box_style1 .icon,
+.tab-style1 .nav-tabs li.nav-item a.active, .tab-style1 .nav-tabs li.nav-item a.active:hover,
+.price,.contact_text a:hover,
+.profile_info a:hover,
+.tab-style4 .nav-tabs .nav-item a.active,
+.toggle_info i {
+	color: #FF324D;
+}
+
+.btn-default:hover,
+.text_default {
+	color: #FF324D !important;
+}
+
+.btn-default::before,
+.sk-chase-dot:before,
+.carousel-control-next:hover, .carousel-control-prev:hover, .light_arrow .carousel-control-next:hover, .light_arrow .carousel-control-prev:hover,
+.scrollup:hover,
+.cart_count,
+.post_date,
+.social_icons.social_style1 li a:hover,
+.btn-fill-in,
+.tab-style2 .nav-tabs li.nav-item a.active, .tab-style2 .nav-tabs li.nav-item a.active:hover,
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span,
+.contact_style1 .contact_icon i,
+.custome-checkbox input[type="checkbox"]:checked + .form-check-label::before,
+.pagination_style1 .page-item.active .page-link, .pagination_style1 .page-item .page-link:hover,
+.sidebar .widget_title::before,
+.tags a:hover,
+.blockquote_style1,
+.custome-radio input[type="radio"] + .form-check-label::after {
+	background-color: #FF324D;
+}
+
+.btn-default,
+.btn-fill-in,
+.owl-theme .owl-dots .owl-dot span,
+.custome-checkbox input[type="checkbox"]:checked + .form-check-label::before,
+.pagination_style1 .page-item.active .page-link, .pagination_style1 .page-item .page-link:hover,
+.tab-style4 .nav-tabs .nav-item a.active,
+.toggle_info,
+.custome-radio input[type="radio"]:checked + .form-check-label::before {
+	border-color: #FF324D;
+}
+
+.blockquote_style1 {
+	border-color: #DF122D;
+}

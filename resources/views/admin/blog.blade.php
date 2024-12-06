@@ -1,0 +1,281 @@
+
+@extends('layouts.admin')
+
+@push('styles')
+    <!-- base:css -->
+    <link rel="stylesheet" href="/admin_resources/vendors/typicons.font/font/typicons.css">
+    <link rel="stylesheet" href="/admin_resources/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="/admin_resources/css/vertical-layout-light/style.css">
+
+@endpush
+
+@push('scripts')
+ 
+<script src="/admin_resources/vendors/js/vendor.bundle.base.js"></script>
+<script src="/admin_resources/js/off-canvas.js"></script>
+<script src="/admin_resources/js/hoverable-collapse.js"></script>
+<script src="/admin_resources/js/template.js"></script>
+<script src="/admin_resources/js/settings.js"></script>
+<script src="/admin_resources/js/todolist.js"></script>
+<!-- plugin js for this page -->
+<script src="/admin_resources/vendors/progressbar.js/progressbar.min.js"></script>
+<script src="/admin_resources/vendors/chart.js/Chart.min.js"></script>
+<!-- Custom js for this page-->
+<script src="/admin_resources/js/dashboard.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ 
+<script>
+
+    // Set the image source dynamically for the Lightbox modal
+    $('#imageModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var imageUrl = button.data('image'); // Extract the image URL from data-* attribute
+        
+        // Set the image source in the modal
+        $('#modalImage').attr('src', imageUrl);
+    });
+
+
+
+    // Set the action URL for the delete form dynamically when the delete button is clicked
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var blogId = button.data('id'); // Extract info from data-* attributes
+        var blogName = button.data('name');
+        
+        var actionUrl = '/admin/blog/' + blogId; // Construct the delete URL
+        $('#deleteForm').attr('action', actionUrl); // Set the action attribute of the form
+        $('#deleteCategoryName').text(blogName); // Set the blog name in the modal body
+    });
+
+    // Set the values for the edit form dynamically when the edit button is clicked
+    $('.edit-btn').on('click', function () {
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+        var content = $(this).data('content');
+        var image = $(this).data('image');
+        
+        // Construct the update URL dynamically using the ID
+        var actionUrl = "{{ route('admin.blog.update', ':id') }}".replace(':id', id);
+        
+        // Set the action attribute of the edit form
+        $('#editForm').attr('action', actionUrl);
+
+        // Set the values of the form fields
+        $('#editName').val(name);
+        $('#editContent').val(content);
+        if (image) {
+            $('#editImage').val(image); // Only set image if it's available (you may want to handle this differently)
+        }
+    });
+</script>
+
+@endpush
+
+
+@section('title', 'Admin - Blog')
+
+
+
+
+@section('content')
+
+<div class="main-panel">
+    <div class="content-wrapper">
+ 
+      @include('partials.messag-bag')
+
+    
+      
+      <div class="row">
+        <div class="col-sm-6">
+          <h3 class="mb-0 font-weight-bold">Logged in as Admin</h3>
+          <p>Your last login: 21h ago from newzealand.</p>
+        </div>
+        <div class="col-sm-6">
+          <div class="d-flex align-items-center justify-content-md-end">
+            <div class="mb-3 mb-xl-0 pr-1">
+                <button type="button" class="btn btn-sm bg-white btn-icon-text border" onclick="window.location='{{ route('admin.index') }}'">
+                    <i class="typcn typcn-arrow-forward-outline mr-2"></i>Dashboard
+                </button>
+            </div>
+            
+            <div class="pr-1 mb-3 mr-2 mb-xl-0">
+                <button disabled type="button" class="btn btn-sm bg-white btn-icon-text border"  >
+                    <i class="typcn typcn-arrow-forward-outline mr-2"></i>Blog
+                </button>
+            </div>
+            
+     
+          </div>
+        </div>
+      </div>
+
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Blog</span>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Create New Blog</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Blog Name</th>
+                            <th scope="col">Content</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($blogs as $blog)
+                        <tr> 
+                            <td><img src="{{ asset($blog->image) }}" alt="{{ $blog->name }}" width="100" class="img-thumbnail trigger-lightbox" data-bs-toggle="modal" data-bs-target="#imageModal" data-image="{{ asset($blog->image) }}"> {{ $blog->name }}</td>
+                            <td>{{ Str::limit($blog->content, 100) }}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{ $blog->id }}" data-name="{{ $blog->name }}" data-content="{{ $blog->content }}" data-image="{{ $blog->image }}">Edit</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{ $blog->id }}" data-name="{{ $blog->name }}">Delete</button>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No blog posts available.</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+   
+     
+ 
+
+<!-- Image Lightbox Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Blog Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Blog Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!-- Create Blog Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('admin.blog.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Create New Blog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Blog Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="image" name="image" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Blog Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="" method="POST" id="editForm" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Blog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editName" class="form-label">Blog Name</label>
+                        <input type="text" class="form-control" id="editName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editContent" class="form-label">Content</label>
+                        <textarea class="form-control" id="editContent" name="content" rows="5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="editImage" name="image">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Blog Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="" method="POST" id="deleteForm">
+            @csrf
+            @method('DELETE')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Blog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the blog: <strong id="deleteCategoryName"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+   
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+      <div class="d-sm-flex justify-content-center justify-content-sm-between">
+        <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com</a> 2020</span>
+        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard </a>templates from Bootstrapdash.com</span>
+      </div>
+    </footer>
+    <!-- partial -->
+  </div>
+  <!-- main-panel ends -->
+@endsection
+
+
+
+ 
